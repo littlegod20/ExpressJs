@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "match": {
+      "homeTeam": "Tottenam Hotspurs",
+      "awayTeam": "Brazil",
+      "venue": "Old Trafford",
+      "date": "2024-11-23",
+      "kickOff": "15:00"
+    },
+    "ticketHolder": {
+      "name": "John Doe",
+      "membershipId": "MUN123456"
+    },
+    "seat": {
+      "stand": "North Stand",
+      "block": "N34",
+      "row": "12",
+      "seat": "101"
+    },
+    "price": {
+      "amount": 65,
+      "currency": "GBP"
+    },
+    "qrCode": "https://tickets.example.com/qr/FT12345"
+  },
+  {
+    "id": 2,
+    "match": {
+      "homeTeam": "Wales",
+      "awayTeam": "Liverpool",
+      "venue": "Old Trafford",
+      "date": "2024-11-23",
+      "kickOff": "15:00"
+    },
+    "ticketHolder": {
+      "name": "John Doe",
+      "membershipId": "MUN123456"
+    },
+    "seat": {
+      "stand": "North Stand",
+      "block": "N34",
+      "row": "12",
+      "seat": "101"
+    },
+    "price": {
+      "amount": 65,
+      "currency": "GBP"
+    },
+    "qrCode": "https://tickets.example.com/qr/FT12345"
+  },
+  {
+    "id": 99,
+    "match": {
+      "homeTeam": "Tottenam Hotspurs",
+      "awayTeam": "Brazil",
+      "venue": "Old Trafford",
+      "date": "2024-11-23",
+      "kickOff": "15:00"
+    },
+    "ticketHolder": {
+      "name": "John Doe",
+      "membershipId": "MUN123456"
+    },
+    "seat": {
+      "stand": "North Stand",
+      "block": "N34",
+      "row": "12",
+      "seat": "101"
+    },
+    "price": {
+      "amount": 65,
+      "currency": "GBP"
+    },
+    "qrCode": "https://tickets.example.com/qr/FT12345"
+  },
+  {
+    "id": 100,
+    "match": {
+      "homeTeam": "Tottenam Hotspurs",
+      "awayTeam": "Brazil",
+      "venue": "Old Trafford",
+      "date": "2024-11-23",
+      "kickOff": "15:00"
+    },
+    "ticketHolder": {
+      "name": "John Doe",
+      "membershipId": "MUN123456"
+    },
+    "seat": {
+      "stand": "North Stand",
+      "block": "N34",
+      "row": "12",
+      "seat": "101"
+    },
+    "price": {
+      "amount": 65,
+      "currency": "GBP"
+    },
+    "qrCode": "https://tickets.example.com/qr/FT12345"
+  }
+]

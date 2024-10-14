@@ -1,6 +1,8 @@
-const { writeTicketToFile } = require("../writeFileFunc");
+const { writeTicketToFile } = require("../services/writeFileFunc");
 const fs = require("fs");
-const filePath = "booked.json";
+const path = require("path");
+const filePath =
+  "C:/Users/Theo/OneDrive/Desktop/presentation/utils/booked.json";
 
 const getTicket = (req, res) => {
   if (!fs.existsSync(filePath)) {
