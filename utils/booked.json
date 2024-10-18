@@ -1,0 +1,12 @@
+[
+  {
+    "id": 2,
+    "passenger": "Anna Doe",
+    "flight": "BC323"
+  },
+  {
+    "id": 3,
+    "passenger": "Martha Doe",
+    "flight": "ACc23"
+  }
+]

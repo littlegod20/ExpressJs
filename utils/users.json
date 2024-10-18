@@ -2,5 +2,9 @@
   {
     "name": "Theophilus",
     "hashedPassword": "$2b$10$17h2D2rqrx.87afX7DYxk.x9eI7sdrrTX0GpaCgll.CpDhWk6l1li"
+  },
+  {
+    "name": "Mr. Frimpong",
+    "hashedPassword": "$2b$10$xHGQ/oShlZSgLHnDN5t1Du9k7fUkh5egqxg2DatZMDiKCAsTatC0u"
   }
 ]
