@@ -1,7 +1,8 @@
+const createAbsolutePath = require("../services/projectRoot");
 const { writeToFile } = require("../services/writeFileFunc");
 const fs = require("fs");
-const filePath =
-  "C:/Users/Theo/OneDrive/Desktop/presentation/utils/booked.json";
+
+const filePath = createAbsolutePath("/presentation/utils/booked.json");
 
 const getTicket = (req, res) => {
   if (!fs.existsSync(filePath)) {

@@ -1,5 +1,9 @@
-const { writeToFile } = require("../services/writeFileFunc");
 const bcrypt = require("bcrypt");
+const { writeToFile } = require("../services/writeFileFunc");
+const createAbsolutePath = require("../services/projectRoot");
+
+// get project root path and join with desired file path.
+const filePath = createAbsolutePath("/presentation/utils/users.json");
 
 const signUp = async (req, res) => {
   const { name, password } = req.body;
@@ -17,7 +21,7 @@ const signUp = async (req, res) => {
     const user = { name, hashedPassword };
 
     // save user credentials to users.json file
-    writeToFile("users.json", user);
+    writeToFile(filePath, user);
 
     res.status(201).json({
       success: true,
