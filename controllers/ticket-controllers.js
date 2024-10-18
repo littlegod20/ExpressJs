@@ -1,6 +1,5 @@
-const { writeTicketToFile } = require("../services/writeFileFunc");
+const { writeToFile } = require("../services/writeFileFunc");
 const fs = require("fs");
-const path = require("path");
 const filePath =
   "C:/Users/Theo/OneDrive/Desktop/presentation/utils/booked.json";
 
@@ -27,7 +26,7 @@ const postTicket = (req, res) => {
   }
 
   const bookedTicket = body;
-  writeTicketToFile(filePath, bookedTicket);
+  writeToFile(filePath, bookedTicket);
 
   res
     .status(200)

@@ -1,13 +1,13 @@
 const fs = require("fs");
 
-const writeTicketToFile = async (path, bookedTicket) => {
+const writeToFile = async (path, data) => {
   let ticket = [];
 
   await getFile(path)
     .then((result) => (ticket = result ? JSON.parse(result) : []))
     .catch((err) => console.log(err));
 
-  ticket.push(bookedTicket);
+  ticket.push(data);
 
   await fs.promises.writeFile(path, JSON.stringify(ticket, null, 2), "utf-8");
 };
@@ -24,4 +24,4 @@ const getFile = (path) => {
   });
 };
 
-module.exports = { writeTicketToFile, getFile };
+module.exports = { writeToFile };

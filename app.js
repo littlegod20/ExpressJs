@@ -6,7 +6,7 @@ const port = 5000;
 
 app.use(express.json());
 
-app.get("/", home_route);
+app.use("/", home_route);
 
 app.use("/api/ticket", ticket_routes);
 
