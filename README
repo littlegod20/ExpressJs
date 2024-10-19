@@ -1,0 +1,19 @@
+// This is an express js project which provides api for booking tickets
+// to use the apis, you'll need to first sign up if you haven't yet.
+// then log in with the same credentials..
+// If you are using Postman, an access token will be given to you to add to your headers.
+// Afterwards you can continue to use the rest of the apis-- you'd have been authorized to use them after following the steps above.
+
+// for your credentials, this is the structure you need to input
+// {
+// name:'john doe',
+// email:'johndoe@email.com',
+// password: 'some password'
+// }
+
+// for booking a ticket, this is the structure to input
+// {
+// id: 1,
+// passenger: 'john doe',
+// flight: "your flight no."
+// }
