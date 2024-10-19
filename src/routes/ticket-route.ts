@@ -1,10 +1,11 @@
-const express = require("express");
-const {
+import express from "express";
+
+import {
   getTicket,
   postTicket,
   updateTicket,
   deleteTicket,
-} = require("../controllers/ticket-controllers");
+} from "../controllers/ticket-controllers";
 
 const router = express.Router();
 router.get("/read-ticket", getTicket);
@@ -15,4 +16,4 @@ router.put("/update-ticket/:id", updateTicket);
 
 router.delete("/delete-ticket/:id", deleteTicket);
 
-module.exports = router;
+export default router;

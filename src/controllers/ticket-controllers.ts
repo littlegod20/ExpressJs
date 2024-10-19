@@ -1,29 +1,34 @@
-const createAbsolutePath = require("../services/projectRoot");
-const { writeToFile } = require("../services/writeFileFunc");
-const fs = require("fs");
+import { Request, Response } from "express";
+import createAbsolutePath from "../services/projectRoot";
+import { writeToFile } from "../services/writeFileFunc";
+import fs from "fs";
+import { Data } from "../utils/types";
 
-const filePath = createAbsolutePath("/presentation/utils/booked.json");
+const filePath = createAbsolutePath("utils/booked.json");
 
-const getTicket = (req, res) => {
+export const getTicket = (req: Request, res: Response): void => {
   if (!fs.existsSync(filePath)) {
-    return res
+    res
       .status(404)
       .json({ success: false, msg: "Please submit ticket details first" });
+    return;
   }
   const fileData = fs.readFileSync(filePath, "utf-8");
   if (!fileData) {
-    return res.status(404).json({ success: false, msg: "No data available" });
+    res.status(404).json({ success: false, msg: "No data available" });
+    return;
   }
   res.status(200).json({ success: true, data: JSON.parse(fileData) });
 };
 
-const postTicket = (req, res) => {
+export const postTicket = (req: Request, res: Response): void => {
   const body = req.body;
 
   if (Object.keys(body).length === 0) {
-    return res
+    res
       .status(400)
       .json({ success: false, msg: "Please submit ticketing details" });
+    return;
   }
 
   const bookedTicket = body;
@@ -34,17 +39,16 @@ const postTicket = (req, res) => {
     .json({ success: true, msg: "Details have been submitted successfully" });
 };
 
-const updateTicket = (req, res) => {
+export const updateTicket = (req: Request, res: Response): void => {
   const { id } = req.params;
   const body = req.body;
 
-  const fileData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  const fileData: Data[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
   let ticket = fileData.find((ticket) => ticket.id === Number(id));
 
   if (!ticket) {
-    return res
-      .status(404)
-      .json({ success: false, msg: "No ticket matches your id" });
+    res.status(404).json({ success: false, msg: "No ticket matches your id" });
+    return;
   }
   const updateFileData = fileData.map((item) => {
     if (item.id === Number(id)) {
@@ -58,16 +62,15 @@ const updateTicket = (req, res) => {
   res.status(200).json({ success: true, data: updateFileData });
 };
 
-const deleteTicket = (req, res) => {
+export const deleteTicket = (req: Request, res: Response): void => {
   const { id } = req.params;
-  const fileData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  const fileData: Data[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
   let ticket = fileData.find((ticket) => ticket.id === Number(id));
 
   if (!ticket) {
-    return res
-      .status(404)
-      .json({ success: false, msg: "No ticket matches your id" });
+    res.status(404).json({ success: false, msg: "No ticket matches your id" });
+    return;
   }
 
   const updateFileData = fileData.filter((item) => item.id !== Number(id));
@@ -76,5 +79,3 @@ const deleteTicket = (req, res) => {
 
   res.status(200).json({ success: true, msg: "Ticket deleted successfully" });
 };
-
-module.exports = { getTicket, postTicket, updateTicket, deleteTicket };
