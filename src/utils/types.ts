@@ -13,7 +13,6 @@ export interface Data {
 export interface UserPayload extends JwtPayload {
   name: string;
   password: string;
-  // Add other properties that are in your JWT payload
 }
 
 export interface RequestWithUser extends ExpressRequest {
