@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { writeToFile } from "../services/writeFileFunc";
-import createAbsolutePath from "../services/projectRoot";
 import { Data } from "../utils/types";
-
-// get project root path and join with desired file path.
-const filePath = createAbsolutePath("utils/users.json");
+import { User } from "../models/user.models";
 
 export const signUp = async (req: Request, res: Response): Promise<void> => {
   const { name, password, email } = req.body;
@@ -23,12 +19,11 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user: Data = { name, email, hashedPassword };
 
-    // save user credentials to users.json file
-    writeToFile(filePath, user);
+    const savedUser = await User.create(user);
 
     res.status(201).json({
       success: true,
-      msg: `${user.name} has signed up successfully🎉.`,
+      msg: `${savedUser.name} has signed up successfully🎉.`,
     });
     return;
   } catch (error) {

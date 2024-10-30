@@ -3,6 +3,7 @@ import fs from "fs";
 import createAbsolutePath from "../services/projectRoot";
 import { NextFunction, Request, Response } from "express";
 import { Data } from "../utils/types";
+import { User } from "../models/user.models";
 
 const file = createAbsolutePath("utils/users.json");
 
@@ -11,35 +12,18 @@ const validator = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { name, password, email } = req.body;
+  const { email } = req.body;
 
-  if (!fs.existsSync(file)) {
+  if (!(await User.exists({ email: email }))) {
     res
       .status(404)
       .json({ success: false, msg: "Please sign up with details first" });
     return;
   }
 
-  const users: Data[] = JSON.parse(fs.readFileSync(file, "utf-8"));
-  const user = users.find((item) => item.name === name && item.email === email);
-
-  if (!users) {
-    res.status(400).json({ success: false, msg: "Please signup first!" });
-    return;
-  }
-
-  if (!user) {
-    res
-      .status(400)
-      .json({ success: false, msg: "No user matches your credentials" });
-    return;
-  }
-
   try {
-    if (
-      user.hashedPassword &&
-      (await bcrypt.compare(password, user.hashedPassword))
-    ) {
+    const foundUser = await User.findOne({ email: email });
+    if (foundUser) {
       next();
     } else {
       res.json({

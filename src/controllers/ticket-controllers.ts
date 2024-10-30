@@ -1,81 +1,74 @@
 import { Request, Response } from "express";
-import createAbsolutePath from "../services/projectRoot";
-import { writeToFile } from "../services/writeFileFunc";
-import fs from "fs";
-import { Data } from "../utils/types";
+import { v4 as uuidv4 } from "uuid";
+import { Ticket } from "../models/ticket.model";
 
-const filePath = createAbsolutePath("utils/booked.json");
-
-export const getTicket = (req: Request, res: Response): void => {
-  if (!fs.existsSync(filePath)) {
-    res
-      .status(404)
-      .json({ success: false, msg: "Please submit ticket details first" });
-    return;
-  }
-  const fileData = fs.readFileSync(filePath, "utf-8");
-  if (!fileData) {
-    res.status(404).json({ success: false, msg: "No data available" });
-    return;
-  }
-  res.status(200).json({ success: true, data: JSON.parse(fileData) });
+export const getTicket = async (req: Request, res: Response): Promise<void> => {
+  const selectedTicket = await Ticket.find();
+  res.status(200).json({ success: true, data: selectedTicket });
 };
 
-export const postTicket = (req: Request, res: Response): void => {
-  const body = req.body;
+export const postTicket = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { passenger, flight } = req.body;
 
-  if (Object.keys(body).length === 0) {
+  if (!passenger && !flight) {
     res
       .status(400)
       .json({ success: false, msg: "Please submit ticketing details" });
     return;
   }
 
-  const bookedTicket = body;
-  writeToFile(filePath, bookedTicket);
+  const bookedTicket = await Ticket.create({
+    id: uuidv4(),
+    passenger,
+    flight,
+  });
+  console.log(bookedTicket);
 
   res
     .status(200)
     .json({ success: true, msg: "Details have been submitted successfully" });
 };
 
-export const updateTicket = (req: Request, res: Response): void => {
-  const { id } = req.params;
-  const body = req.body;
+export const updateTicket = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const ticketId = req.params.id;
+    const { passenger, flight } = req.body;
 
-  const fileData: Data[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-  let ticket = fileData.find((ticket) => ticket.id === Number(id));
+    const updatedTicket = await Ticket.findByIdAndUpdate(
+      ticketId,
+      { passenger, flight },
+      {
+        new: true,
+      }
+    ).exec();
 
-  if (!ticket) {
-    res.status(404).json({ success: false, msg: "No ticket matches your id" });
-    return;
-  }
-  const updateFileData = fileData.map((item) => {
-    if (item.id === Number(id)) {
-      item = body;
+    if (!updatedTicket) {
+      res.status(404).json({ error: "Ticket not found" });
+      return;
     }
-    return item;
-  });
-
-  fs.writeFileSync(filePath, JSON.stringify(updateFileData, null, 2));
-
-  res.status(200).json({ success: true, data: updateFileData });
+    res.json(updatedTicket);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating ticket" });
+  }
 };
 
-export const deleteTicket = (req: Request, res: Response): void => {
-  const { id } = req.params;
-  const fileData: Data[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+export const deleteTicket = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const ticketId = req.params.id;
+  const deleteTicket = await Ticket.deleteOne({ _id: ticketId });
 
-  let ticket = fileData.find((ticket) => ticket.id === Number(id));
-
-  if (!ticket) {
-    res.status(404).json({ success: false, msg: "No ticket matches your id" });
+  if (!deleteTicket) {
+    res.status(404).json({ success: false, msg: `No ticket matches your id` });
     return;
   }
-
-  const updateFileData = fileData.filter((item) => item.id !== Number(id));
-
-  fs.writeFileSync(filePath, JSON.stringify(updateFileData, null, 2));
 
   res.status(200).json({ success: true, msg: "Ticket deleted successfully" });
 };
