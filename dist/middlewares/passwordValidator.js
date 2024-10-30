@@ -12,33 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const fs_1 = __importDefault(require("fs"));
 const projectRoot_1 = __importDefault(require("../services/projectRoot"));
+const user_models_1 = require("../models/user.models");
 const file = (0, projectRoot_1.default)("utils/users.json");
 const validator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, password, email } = req.body;
-    if (!fs_1.default.existsSync(file)) {
+    if (!(yield user_models_1.User.exists({ name: name, password: password, email: email }))) {
         res
             .status(404)
             .json({ success: false, msg: "Please sign up with details first" });
         return;
     }
-    const users = JSON.parse(fs_1.default.readFileSync(file, "utf-8"));
-    const user = users.find((item) => item.name === name && item.email === email);
-    if (!users) {
-        res.status(400).json({ success: false, msg: "Please signup first!" });
-        return;
-    }
-    if (!user) {
-        res
-            .status(400)
-            .json({ success: false, msg: "No user matches your credentials" });
-        return;
-    }
     try {
-        if (user.hashedPassword &&
-            (yield bcrypt_1.default.compare(password, user.hashedPassword))) {
+        const foundUser = yield user_models_1.User.findOne({ email: email });
+        if (foundUser) {
             next();
         }
         else {

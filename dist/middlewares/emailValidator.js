@@ -12,33 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signUp = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const projectRoot_1 = __importDefault(require("../services/projectRoot"));
 const user_models_1 = require("../models/user.models");
-const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, password, email } = req.body;
+const file = (0, projectRoot_1.default)("utils/users.json");
+const validator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    if (!(yield user_models_1.User.exists({ email: email }))) {
+        res
+            .status(404)
+            .json({ success: false, msg: "Please sign up with details first" });
+        return;
+    }
     try {
-        if (!name && !password) {
-            res.status(400).json({
+        const foundUser = yield user_models_1.User.findOne({ email: email });
+        if (foundUser) {
+            next();
+        }
+        else {
+            res.json({
                 success: false,
-                msg: "please attach user name and password to the request body.",
+                msg: "Password does not match stored credential.",
             });
             return;
         }
-        // hash user password
-        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        const user = { name, email, hashedPassword };
-        const savedUser = yield user_models_1.User.create(user);
-        res.status(201).json({
-            success: true,
-            msg: `${savedUser.name} has signed up successfully🎉.`,
-        });
-        return;
     }
     catch (error) {
         console.log(error);
         res.status(500).send("An internal server error occured");
-        return;
     }
 });
-exports.signUp = signUp;
+exports.default = validator;

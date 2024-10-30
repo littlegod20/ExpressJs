@@ -12,6 +12,7 @@ export interface Data {
 
 export interface UserPayload extends JwtPayload {
   name: string;
+  email: string;
   password: string;
 }
 
